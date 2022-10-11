@@ -6,3 +6,4 @@ Laboratory works:
 2. Work2 | Spiral matrix;
 3. Work3 | Thermal conductivity;
 4. Work4 | Thermal conductivity;
+5. Work5 | Mandelbrot set, the Weierstrass function, perimeter and square of figure;
