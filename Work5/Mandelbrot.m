@@ -17,17 +17,17 @@ for i = 1 : n
             z = z^2 + c;
             
             if abs(z) > R
-                K(j,i) = iter - k;
+                K(j,i) = 1;
                 break;
             end
         end
     end
 end
         
-figure;
+fig1 = figure;
 imagesc(K);
 colormap('gray');
-axis square;
+% axis square;
 
 end
 

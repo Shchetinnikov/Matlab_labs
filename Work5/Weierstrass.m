@@ -63,11 +63,11 @@ annotation(fig1,'textbox',...
        
 
 
-c1 = uicontrol(fig1,'Style','slider', 'Min', 1, 'Max',10,'SliderStep',[0.01 0.10], 'Position', [290 50 405 20]);
+c1 = uicontrol(fig1,'Style','slider', 'Min', 1, 'Max',10,'SliderStep',[0.001 0.10], 'Position', [290 50 405 20]);
 c1.Value = a;
 c1.Callback = @update;
 
-c2 = uicontrol(fig1,'Style','slider', 'Min',0, 'Max',10,'SliderStep',[0.01 0.10], 'Position', [290 20 405 20]);
+c2 = uicontrol(fig1,'Style','slider', 'Min',0, 'Max',10,'SliderStep',[0.001 0.10], 'Position', [290 20 405 20]);
 c2.Value = b;
 c2.Callback = @update;
 

@@ -54,11 +54,11 @@ flag = 0;
 error_plot = zeros(1, size(t_plot, 2));
 for n = 1 : size(t_plot, 2)
     
-    [error, index] = max(abs(u_plot(n, :) - u_plot_real));
+    [error, index] = max((abs(u_plot(n, :) - u_plot_real)) ./ u_plot_real);
     error_plot(1, n) = error;
     
-    if flag == 0 && u_plot(n, index) * 0.01 >= error
-        t_error = t_plot(n);
+    if flag == 0 && 0.01 >= error 
+        t_error = t_plot(n)
         flag = 1;
     end
 end
