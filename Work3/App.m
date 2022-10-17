@@ -66,8 +66,8 @@ for n = 1 : t_shape
     
     legend1 = legend('Analytical solution', 'Numerical solution');
     set(legend1,...
-    'Position',[0.616582524914859 0.211353533943262 0.243250044509908 0.108371193448692],...
-    'FontSize',9);
+        'Position',[0.616582524914859 0.211353533943262 0.243250044509908 0.108371193448692],...
+        'FontSize',9);
     
     drawnow;
 end
