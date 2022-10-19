@@ -1,21 +1,22 @@
 function [ alpha ] = Angle(m, g, V0, k, L0, T, tau)
 % Alpha determination by current distance
 
+alpha = -1;
 eps   = 0.01;
-tspan = linspace(0, T, round(T/tau) + 1);
 
 % Проверка L0 и первый выстрел (максимальный)
-x0 = [0 V0 * cos(pi/4)];
-y0 = [0 V0 * sin(pi/4)];
-[t, x_vec] = ode45(@(t, x_vec) odefun(t, x_vec, 0, m, k), tspan, x0);
-[t, y_vec] = ode45(@(t, y_vec) odefun(t, y_vec, g, m, k), tspan, y0);
-
-indexes  = find(y_vec(:,1) >= 0);
-ind_size = size(indexes, 1);
-x_max    = x_vec(indexes(ind_size), 1);
+[x_vec, y_vec] = ode_sol( m, g, V0, k, pi/4, T, tau );
+x_max = x_vec(size(x_vec, 1), 1);
 
 if L0 > x_max
-    disp('Целевая точка находится дальше максимально возможной');
+    disp('Максимальное расстояние полета снаряда: ');
+    x_max
+    return;
+else
+    if L0 == 0
+        disp('Целевая точка находится в точке старта');
+        return;
+    end
 end
 
 % Метод стрельбы
@@ -30,14 +31,8 @@ while abs(x_r - L0) > eps || abs(x_l - L0) > eps
     if abs(x_r - L0) > eps
         alpha = (alpha_r + alpha_2) / 2;
         
-        x0 = [0 V0 * cos(alpha)];
-        y0 = [0 V0 * sin(alpha)];
-        [t, x_vec] = ode45(@(t, x_vec) odefun(t, x_vec, 0, m, k), tspan, x0);
-        [t, y_vec] = ode45(@(t, y_vec) odefun(t, y_vec, g, m, k), tspan, y0);
-
-        indexes  = find(y_vec(:,1) >= 0);
-        ind_size = size(indexes, 1);
-        x_r = x_vec(indexes(ind_size), 1);
+        [x_vec, y_vec] = ode_sol( m, g, V0, k, alpha, T, tau );
+        x_r = x_vec(size(x_vec, 1), 1);
         
         if x_r > L0
             alpha_r = alpha;
@@ -49,14 +44,8 @@ while abs(x_r - L0) > eps || abs(x_l - L0) > eps
     if abs(x_l - L0) > eps
         alpha = (alpha_l + alpha_1) / 2;
         
-        x0 = [0 V0 * cos(alpha)];
-        y0 = [0 V0 * sin(alpha)];
-        [t, x_vec] = ode45(@(t, x_vec) odefun(t, x_vec, 0, m, k), tspan, x0);
-        [t, y_vec] = ode45(@(t, y_vec) odefun(t, y_vec, g, m, k), tspan, y0);
-
-        indexes  = find(y_vec(:,1) >= 0);
-        ind_size = size(indexes, 1);
-        x_l = x_vec(indexes(ind_size), 1);
+        [x_vec, y_vec] = ode_sol( m, g, V0, k, alpha, T, tau );
+        x_l = x_vec(size(x_vec, 1), 1);
         
         if x_l > L0
             alpha_l = alpha;
@@ -64,10 +53,6 @@ while abs(x_r - L0) > eps || abs(x_l - L0) > eps
             alpha_1 = alpha;
         end
     end
-    alphas_l = [alpha_1, alpha_l]
-    alphas_r = [alpha_r, alpha_2]
-    xs =    [x_r, x_l]
-    errors = [abs(x_l - L0), abs(x_r - L0)]
 end
 
 alpha = [alpha_1, alpha_r];

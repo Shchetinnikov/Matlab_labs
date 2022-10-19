@@ -28,12 +28,47 @@ m  = 10;     % масса снар€да
 g  = 9.81;   % ускорение свободного падени€
 
 k   = 0.6;   % коэффициент сопротивлени€
-L0  = 8;     % целева€ координата
+L0 = 6;      % целева€ точка
 
 % ¬ременна€ сетка
 tau = 0.001;  % шаг
 T   = 5;      % временной промежуток
 
 
-% Distance(m, g, V0, T, tau);
-alpha = Angle(m, g, V0, k, L0, T, tau)
+
+% «адача 1: зависимость дальности полета от начального угла
+Distances(m, g, V0, T);
+
+% «адача 2: определение начального угла полета в целевую точку
+alpha = Angle(m, g, V0, k, L0, T, tau);
+
+% ¬изуализаци€ траектории полета снар€да в заданную точку
+if alpha ~= -1
+    fontsize = 10;
+
+    figure1 = figure('Position', [200 50 750 500]);
+    axes1 = axes('Parent',figure1,'LineStyleOrderIndex',2);
+    hold(axes1,'on');
+
+    ylabel('y', 'FontSize', fontsize);
+    xlabel('x', 'FontSize', fontsize);
+    title('Flight path','FontSize',12);
+
+    plot1 = plot(L0, 0, 'ro');
+    set(plot1, 'DisplayName', 'aim');
+
+    for angle_i = alpha
+        if angle_i == 0
+           continue
+        end
+
+        [x_vec, y_vec] = ode_sol( m, g, V0, k, angle_i, T, tau );
+
+        plot1 = plot(x_vec(1:size(x_vec, 1), 1), y_vec(1:size(y_vec, 1), 1), ...
+                     'LineStyle','--', 'Parent',axes1); 
+        set(plot1, 'DisplayName', ['alpha = ', num2str(angle_i)]);
+    end
+
+    legend1 = legend(axes1,'show');
+    set(legend1,'FontSize',7);
+end
