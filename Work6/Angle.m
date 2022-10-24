@@ -1,16 +1,48 @@
 function [ alpha ] = Angle(m, g, V0, k, L0, T, tau)
 % Alpha determination by current distance
 
-alpha = -1;
 eps   = 0.01;
 
-% Проверка L0 и первый выстрел (максимальный)
-[x_vec, y_vec] = ode_sol( m, g, V0, k, pi/4, T, tau );
-x_max = x_vec(size(x_vec, 1), 1);
+% Поиск максимального расстояния
+alpha_l = 0;
+alpha_r = pi/2;
+
+x_l = 0;
+x_r = 0;
+while 1
+    alpha = (alpha_l + alpha_r) / 2;
+
+    [x_vec, y_vec] = ode_sol( m, g, V0, k, alpha, T, tau );
+    x_i = x_vec(size(x_vec, 1), 1);
+
+    if (x_l + x_r) == 0 || (x_i > x_l && x_i > x_r)
+        x_r = x_i;
+        alpha_r = alpha;
+        continue;
+    end
+        
+    if x_i > x_l && x_i < x_r
+        x_l = x_i;
+        alpha_l = alpha;
+    else
+        if x_i < x_l && x_i > x_r
+            x_r = x_i;
+            alpha_r = alpha;
+        end
+    end
+   
+    if abs(x_l - x_r) <= eps
+        break;
+    end
+end
+
+% Проверка L0
+alpha = -1;
+x_max = x_r;
 
 if L0 > x_max
     disp('Максимальное расстояние полета снаряда: ');
-    x_max
+    disp(x_max);
     return;
 else
     if L0 == 0
