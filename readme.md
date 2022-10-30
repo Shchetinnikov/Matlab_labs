@@ -7,3 +7,5 @@ Laboratory works:
 3. Work3 | Thermal conductivity;
 4. Work4 | Thermal conductivity;
 5. Work5 | Mandelbrot set, the Weierstrass function, perimeter and square of figure;
+6. Work6 | Projectile flight;
+5. Work7 | Picture recovery;
